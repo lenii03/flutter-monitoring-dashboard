@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../bloc/dashboard_nav_bloc.dart';
-// ignore: unused_import
 import '../bloc/dashboard_nav_event.dart';
 import '../bloc/dashboard_nav_state.dart';
 
@@ -20,7 +19,6 @@ class SidebarWidget extends StatelessWidget {
             padding: const EdgeInsets.all(24.0),
             child: Row(
               children: [
-                // PERBAIKAN: Menghapus [200] dan langsung menggunakan primaryBlue
                 Icon(Icons.hub_rounded, color: AppColors.primaryBlue, size: 32),
                 const SizedBox(width: 12),
                 const Text(
@@ -60,7 +58,6 @@ class SidebarWidget extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  // PERBAIKAN: Menghapus [200] di sini juga
                   Icon(icon, color: isActive ? AppColors.primaryBlue : Colors.grey[400], size: 22),
                   const SizedBox(width: 16),
                   Text(
