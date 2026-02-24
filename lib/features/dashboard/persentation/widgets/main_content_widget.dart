@@ -17,7 +17,6 @@ class MainContentWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header Judul & Tombol Aksi
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -37,7 +36,6 @@ class MainContentWidget extends StatelessWidget {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   ),
                 ),
-              // Tambahan tombol Save untuk halaman Settings
               if (selectedIndex == 2)
                 ElevatedButton.icon(
                   onPressed: () {},
@@ -53,8 +51,6 @@ class MainContentWidget extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 32),
-          
-          // Konten Utama Dinamis
           Expanded(
             child: Container(
               width: double.infinity,
@@ -77,15 +73,12 @@ class MainContentWidget extends StatelessWidget {
     } else if (index == 1) {
       return _buildTaskTable();
     } else if (index == 2) {
-      return _buildSettingsPage(); // Memanggil halaman Settings
+      return _buildSettingsPage();
     } else {
       return Center(child: Text('Area ini nanti diisi konten untuk $title', style: TextStyle(color: Colors.grey[500])));
     }
   }
 
-  // =========================================
-  // 1. WIDGET KHUSUS DASHBOARD OVERVIEW (Tetap sama)
-  // =========================================
   Widget _buildDashboardOverview() {
     return SingleChildScrollView(
       child: Column(
@@ -232,9 +225,7 @@ class MainContentWidget extends StatelessWidget {
     );
   }
 
-  // =========================================
-  // 2. WIDGET KHUSUS TABEL TASK SCHEDULER (Tetap sama)
-  // =========================================
+
   Widget _buildTaskTable() {
     return ClipRRect(
       borderRadius: BorderRadius.circular(16),
@@ -286,9 +277,6 @@ class MainContentWidget extends StatelessWidget {
     );
   }
 
-  // =========================================
-  // 3. WIDGET KHUSUS SETTINGS (BARU)
-  // =========================================
   Widget _buildSettingsPage() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(32.0),
@@ -325,7 +313,6 @@ class MainContentWidget extends StatelessWidget {
     );
   }
 
-  // Helper untuk Header Section di Settings
   Widget _buildSettingsSectionHeader(String title, IconData icon) {
     return Row(
       children: [
@@ -336,11 +323,11 @@ class MainContentWidget extends StatelessWidget {
     );
   }
 
-  // Helper untuk Card pembungkus list Settings
+
   Widget _buildSettingCard({required List<Widget> children}) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.background.withOpacity(0.5), // Sedikit lebih gelap dari surface
+        color: AppColors.background.withOpacity(0.5),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: AppColors.border),
       ),
@@ -348,7 +335,6 @@ class MainContentWidget extends StatelessWidget {
     );
   }
 
-  // Helper untuk baris Switch (Toggle On/Off)
   Widget _buildSwitchTile(String title, String subtitle, bool value) {
     return SwitchListTile(
       title: Text(title, style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.w500)),
@@ -359,7 +345,6 @@ class MainContentWidget extends StatelessWidget {
     );
   }
 
-  // Helper untuk baris Input Text
   Widget _buildTextFieldTile(String label, String placeholder) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
@@ -385,7 +370,6 @@ class MainContentWidget extends StatelessWidget {
     );
   }
 
-  // Helper untuk baris Dropdown
   Widget _buildDropdownTile(String label, String currentValue) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
@@ -407,7 +391,7 @@ class MainContentWidget extends StatelessWidget {
                   items: ['1 Second', '5 Seconds', '30 Seconds', '1 Minute'].map((String value) {
                     return DropdownMenuItem<String>(value: value, child: Text(value));
                   }).toList(),
-                  onChanged: (String? newValue) {}, // Nanti disambung ke BLoC
+                  onChanged: (String? newValue) {},
                 ),
               ),
             ),
