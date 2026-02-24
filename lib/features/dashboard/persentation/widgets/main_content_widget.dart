@@ -2,21 +2,30 @@ import 'package:flutter/material.dart';
 import '../../../../core/theme/app_colors.dart';
 import 'dart:math';
 
-class MainContentWidget extends StatelessWidget {
+class MainContentWidget extends StatefulWidget {
   final int selectedIndex;
   const MainContentWidget({Key? key, required this.selectedIndex}) : super(key: key);
 
   @override
+  State<MainContentWidget> createState() => _MainContentWidgetState();
+}
+
+class _MainContentWidgetState extends State<MainContentWidget> {
+  // Variabel untuk menyimpan status centang dari 10 baris data dummy kita
+  final List<bool> _selectedTasks = List.generate(10, (index) => false);
+
+  @override
   Widget build(BuildContext context) {
     String title = 'Dashboard Overview';
-    if (selectedIndex == 1) title = 'Task Scheduler Management';
-    if (selectedIndex == 2) title = 'System Settings';
+    if (widget.selectedIndex == 1) title = 'Task Scheduler Management';
+    if (widget.selectedIndex == 2) title = 'System Settings';
 
     return Padding(
       padding: const EdgeInsets.all(32.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Header Profil & Notifikasi
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -36,7 +45,6 @@ class MainContentWidget extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 24),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -44,9 +52,8 @@ class MainContentWidget extends StatelessWidget {
                 title,
                 style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
               ),
-              if (selectedIndex == 1) 
+              if (widget.selectedIndex == 1) 
                 ElevatedButton.icon(
-                  
                   onPressed: () => _showNewTaskModal(context),
                   icon: const Icon(Icons.add_rounded, size: 18),
                   label: const Text('New Task'),
@@ -57,7 +64,7 @@ class MainContentWidget extends StatelessWidget {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   ),
                 ),
-              if (selectedIndex == 2)
+              if (widget.selectedIndex == 2)
                 ElevatedButton.icon(
                   onPressed: () {},
                   icon: const Icon(Icons.save_rounded, size: 18),
@@ -72,16 +79,15 @@ class MainContentWidget extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 32),
-          
           Expanded(
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                color: selectedIndex == 0 ? Colors.transparent : AppColors.surface,
+                color: widget.selectedIndex == 0 ? Colors.transparent : AppColors.surface,
                 borderRadius: BorderRadius.circular(16),
-                border: selectedIndex == 0 ? null : Border.all(color: AppColors.border),
+                border: widget.selectedIndex == 0 ? null : Border.all(color: AppColors.border),
               ),
-              child: _buildContentBasedOnIndex(selectedIndex, title),
+              child: _buildContentBasedOnIndex(widget.selectedIndex, title),
             ),
           )
         ],
@@ -96,11 +102,10 @@ class MainContentWidget extends StatelessWidget {
     return Center(child: Text('Area ini nanti diisi konten untuk $title', style: TextStyle(color: Colors.grey[500])));
   }
 
-
   void _showNewTaskModal(BuildContext context) {
     showDialog(
       context: context,
-      barrierColor: Colors.black.withOpacity(0.6), 
+      barrierColor: Colors.black.withOpacity(0.6),
       builder: (context) {
         return AlertDialog(
           backgroundColor: AppColors.surface,
@@ -135,8 +140,8 @@ class MainContentWidget extends StatelessWidget {
               onPressed: () {
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: const Text('Task successfully created!'),
+                  const SnackBar(
+                    content: Text('Task successfully created!'),
                     backgroundColor: AppColors.serverOnline,
                     behavior: SnackBarBehavior.floating,
                   ),
@@ -156,7 +161,6 @@ class MainContentWidget extends StatelessWidget {
     );
   }
 
-
   Widget _buildTaskTable() {
     return ClipRRect(
       borderRadius: BorderRadius.circular(16),
@@ -167,6 +171,7 @@ class MainContentWidget extends StatelessWidget {
             headingRowColor: MaterialStateProperty.all(AppColors.background.withOpacity(0.5)),
             dataRowHeight: 70,
             dividerThickness: 1,
+            showCheckboxColumn: true, 
             columns: const [
               DataColumn(label: Text('Schedule ID', style: TextStyle(color: AppColors.textSecondary, fontWeight: FontWeight.bold))),
               DataColumn(label: Text('Execute Time', style: TextStyle(color: AppColors.textSecondary, fontWeight: FontWeight.bold))),
@@ -180,10 +185,18 @@ class MainContentWidget extends StatelessWidget {
               if (index == 4) status = 'Pending';
               
               return DataRow(
-                // TAMBAHKAN 1 BARIS INI AGAR EFEK HOVER NYALA:
-                onSelectChanged: (value) {}, 
-
+                selected: _selectedTasks[index],
+                onSelectChanged: (bool? value) {
+                  if (value != null) {
+                    setState(() {
+                      _selectedTasks[index] = value; 
+                    });
+                  }
+                },
                 color: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
+                  if (states.contains(MaterialState.selected)) {
+                    return AppColors.primaryBlue.withOpacity(0.2);
+                  }
                   if (states.contains(MaterialState.hovered)) {
                     return AppColors.primaryBlue.withOpacity(0.15); 
                   }
